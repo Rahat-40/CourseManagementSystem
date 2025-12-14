@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+        /* FIX 1: Define the custom bg-red class */
+     .bg-emerald {
+            background-color: #148b4b !important; /* Deep Red */
+            color: white !important; /* Ensure text is visible */
+        }
+
+        /* FIX 2: Ensure thead text color is red (more specific override) */
+    .thead-color th {
+            color: #116530 !important; /* Ensures the red text color is applied to the cells */
+           background-color: #a3ebb1 !important; 
+        }
