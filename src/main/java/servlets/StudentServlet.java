@@ -14,11 +14,15 @@ public class StudentServlet extends HttpServlet {
                 
                 PreparedStatement chk = con.prepareStatement("SELECT * FROM registrations WHERE student_id=? AND course_id=?");
                 chk.setInt(1, studentId); chk.setInt(2, courseId);
+                
+                // check duplicate registation
                 if(chk.executeQuery().next()){
                     req.setAttribute("error", "You are already registered for this course!");
                     req.getRequestDispatcher("Student.jsp").forward(req, res);
                     return;
                 }
+                
+                // add new register course
                 PreparedStatement ps = con.prepareStatement("INSERT INTO registrations(student_id,course_id) VALUES (?,?)");
                 ps.setInt(1, studentId);
                 ps.setInt(2, courseId);

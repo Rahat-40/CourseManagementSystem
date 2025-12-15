@@ -1,7 +1,7 @@
 <%@ page import="java.sql.*, utils.DBConnection" %>
 <%@ page session="true" %>
 <% 
-    // 1. Retrieve the course ID passed from the TeacherServlet
+    // Retrieve the course ID passed from the TeacherServlet
     String cidStr = (String)request.getAttribute("selectedCourseId");
     int courseId = 0;
     String cName = "Unknown";
@@ -12,7 +12,7 @@
             courseId = Integer.parseInt(cidStr);
         }
     } catch (NumberFormatException e) {
-        // If the ID is invalid, courseId remains 0, triggering the error block below
+        
     }
 %>
 <!DOCTYPE html>

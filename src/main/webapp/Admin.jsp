@@ -65,6 +65,8 @@
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white fw-bold"><i class="fa-solid fa-plus-circle text-success me-1"></i> Add New Course</div>
                 <div class="card-body">
+                
+                <%-- form for add new course --%>
                     <form action="adminServlet" method="post">
                         <input type="hidden" name="action" value="addCourse">
                         <input type="text" name="course_name" class="form-control mb-3" placeholder="Course Name" required>
@@ -76,13 +78,15 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-white fw-bold"><i class="fa-solid fa-chalkboard-user text-primary me-1"></i> Assign Teacher</div>
                 <div class="card-body">
+                
+                <%-- form for assign new teacher for a particular course--%>
                     <form action="adminServlet" method="post">
                         <input type="hidden" name="action" value="assignTeacher">
                         
                         <div class="mb-3">
                             <label class="form-label small">Select Course to Assign</label>
                             <select name="course_id" class="form-select" required>
-                                <option value="" disabled selected>--- Select Course (ID: Name) ---</option>
+                                <option value="" disabled selected>Select Course (ID: Name)</option>
                                 <% 
                                     try(Connection con=DBConnection.getConnection(); Statement st=con.createStatement()){
                                         ResultSet rsCourses = st.executeQuery("SELECT course_id, course_name FROM courses ORDER BY course_name");
@@ -98,10 +102,12 @@
                             </select>
                         </div>
                         
+                        <%--select teacher for assign a particular course --%>
+                        
                         <div class="mb-3">
                             <label class="form-label small">Select Teacher</label>
                             <select name="teacher_id" class="form-select" required>
-                                <option value="" disabled selected>--- Select Teacher (ID: Username) ---</option>
+                                <option value="" disabled selected>Select Teacher (ID: Username) </option>
                                 <% 
                                     try(Connection con=DBConnection.getConnection(); Statement st=con.createStatement()){
                                         ResultSet rsTeachers = st.executeQuery("SELECT user_id, username FROM users WHERE role='teacher' ORDER BY username");
@@ -127,6 +133,8 @@
             <div class="card mb-4 border-0 shadow-sm">
                 <div class="card-header bg-emerald">All Users</div>
                 <div class="card-body">
+                
+                <%-- table for all user --%>
                     <table id="usersTable" class="table table-hover">
                         <thead class="table-light thead-color ">
                             <tr><th>ID</th><th>Username</th><th>Role</th></tr>
@@ -143,6 +151,8 @@
              <div class="card border-0 shadow-sm">
                 <div class="card-header bg-emerald">All Courses</div>
                 <div class="card-body">
+                
+                <%-- table for all courses --%>
                     <table id="coursesTable" class="table table-hover">
                         <thead class="table-light thead-color">
                             <tr><th>ID</th><th>Course</th><th>Teacher</th></tr>
@@ -162,7 +172,27 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script>$(document).ready(function(){ $('#usersTable').DataTable({pageLength:3}); $('#coursesTable').DataTable({pageLength:3}); });</script>
-<% if(request.getParameter("msg") != null) { %> <script>Swal.fire('Success', 'Action Completed Successfully', 'success');</script> <% } %>
+<script>
+    $(document).ready(function(){ 
+        $('#usersTable').DataTable({pageLength:5}); 
+        $('#coursesTable').DataTable({pageLength:5}); 
+    });
+
+    // Handle Success Messages
+    <% if(request.getParameter("msg") != null) { %> 
+        Swal.fire('Success', 'Action Completed Successfully', 'success'); 
+    <% } %>
+
+    // Handle Error Messages
+    <% if("duplicate".equals(request.getParameter("error"))) { %>
+        Swal.fire({
+            icon: 'error',
+            title: 'Duplicate Entry',
+            text: 'This course name already exists in the system.'
+        });
+    <% } else if("1".equals(request.getParameter("error"))) { %>
+        Swal.fire('Error', 'An unexpected system error occurred.', 'error');
+    <% } %>
+</script>
 </body>
 </html>

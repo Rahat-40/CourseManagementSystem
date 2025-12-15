@@ -12,11 +12,26 @@ public class AdminServlet extends HttpServlet {
 
         try (Connection con = DBConnection.getConnection()) {
             if(action.equals("addCourse")){
-                String cname = req.getParameter("course_name");
-                PreparedStatement ps = con.prepareStatement("INSERT INTO courses(course_name) VALUES (?)");
-                ps.setString(1, cname);
-                ps.executeUpdate();
-                res.sendRedirect("Admin.jsp?msg=CourseAdded");
+            	// Inside your "addCourse" if block
+            	String cname = req.getParameter("course_name");
+
+            	// 1. Check if it exists first
+            	PreparedStatement checkPs = con.prepareStatement("SELECT COUNT(*) FROM courses WHERE course_name = ?");
+            	checkPs.setString(1, cname);
+            	ResultSet rs = checkPs.executeQuery();
+            	rs.next();
+
+            	if (rs.getInt(1) > 0) {
+            	    // Redirect with a specific error code
+            	    res.sendRedirect("Admin.jsp?error=duplicate");
+            	} else {
+            	    // 2. Proceed with Insertion
+            	    PreparedStatement ps = con.prepareStatement("INSERT INTO courses(course_name) VALUES (?)");
+            	    ps.setString(1, cname);
+            	    ps.executeUpdate();
+            	    res.sendRedirect("Admin.jsp?msg=CourseAdded");
+            	}
+            	
             } else if(action.equals("assignTeacher")){
                 int cid = Integer.parseInt(req.getParameter("course_id"));
                 int tid = Integer.parseInt(req.getParameter("teacher_id"));

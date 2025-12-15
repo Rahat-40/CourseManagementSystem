@@ -6,13 +6,13 @@ import javax.servlet.http.*;
 public class TeacherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String action = req.getParameter("action");
+        
+        // handle view students a particular course
         if ("viewStudents".equals(action)) {
             String courseId = req.getParameter("courseId");
             req.setAttribute("selectedCourseId", courseId);
             req.getRequestDispatcher("teacherStudentsByCourse.jsp").forward(req, res);
         } 
-   //         else {
-//            req.getRequestDispatcher("Teacher.jsp").forward(req, res);
-//        }
+
     }
 }

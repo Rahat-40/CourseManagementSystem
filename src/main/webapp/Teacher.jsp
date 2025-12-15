@@ -8,10 +8,14 @@
 <html lang="en">
 <head>
     <title>Teacher Dashboard</title>
+    
+    <%-- External CSS: Bootstrap, DataTables, and Google Fonts --%>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    
+    <%-- custom css --%>
     <style>body{font-family:'Poppins',sans-serif;background:#f8f9fa;}
             .bg-emerald {
             background-color: #148b4b !important; 
@@ -26,6 +30,8 @@
     
 </head>
 <body>
+
+<%-- navber section--%>
 <nav class="navbar navbar-dark bg-success sticky-top">
   <div class="container-fluid">
      <span class="navbar-brand fw-bold ms-3">Teacher Portal</span>
@@ -47,6 +53,8 @@
     <div class="card shadow border-0">
         <div class="card-header bg-white py-3"><h5 class="m-0 fw-bold text-success">Your Assigned Courses</h5></div>
         <div class="card-body">
+        
+        <%-- table for show teacher assign courses --%>
             <table id="teacherTable" class="table table-hover align-middle">
                 <thead class="table-success thead-color"><tr><th>ID</th><th>Course Name</th><th class="text-center">Action</th></tr></thead>
                 <tbody>
@@ -56,6 +64,8 @@
                     <tr>
                         <td class="fw-bold">#<%= rs.getInt("course_id") %></td>
                         <td><%= rs.getString("course_name") %></td>
+                        
+                        <%-- action for show students of a particular course --%>
                         <td class="text-center">
                             <a href="teacherServlet?action=viewStudents&courseId=<%= rs.getInt("course_id") %>" class="btn btn-outline-success btn-sm rounded-pill fw-bold"><i class="fa-solid fa-users me-1"></i> View Students</a>
                         </td>

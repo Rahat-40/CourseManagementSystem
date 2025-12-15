@@ -11,24 +11,31 @@ import models.User;
 public class LoginServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		// get parameter from request
 		String username = req.getParameter("username");
 		String pass = req.getParameter("password");
 		
+		// create connection to db
 		try(Connection con = DBConnection.getConnection()) {
+	
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username=?");
 			ps.setString(1,username);
 			ResultSet rs = ps.executeQuery();
 			
+			// check user present or not
             if(rs.next() && BCrypt.checkpw(pass, rs.getString("password"))) {
-                User user = new User();
+                User user = new User();               // create new user and store value
                 user.setUserId(rs.getInt("user_id"));
                 user.setUsername(rs.getString("username"));
                 user.setRole(rs.getString("role"));
 
+                // store user to session
                 HttpSession session = req.getSession();
                 session.setAttribute("currentUser", user);
                 session.setMaxInactiveInterval(30*60); 
 				
+                // redirect according to role
 				if(user.getRole().equals("admin")) resp.sendRedirect("Admin.jsp");
 				else if(user.getRole().equals("student")) resp.sendRedirect("Student.jsp");
 				else if(user.getRole().equals("teacher")) resp.sendRedirect("Teacher.jsp"); // Redirect to servlet to load dashboard logic
